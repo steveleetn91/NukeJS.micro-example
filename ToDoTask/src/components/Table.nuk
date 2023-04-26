@@ -1,0 +1,30 @@
+import NukeJSCore from "nukejscore"
+
+export default function TABLETODOLIST(data, toDoItems, deleteTask, finishTask) {
+  const nukejsCore = new NukeJSCore;
+  return <NukApp>
+    <table class="table mb-4">
+      <thead>
+        <tr>
+          <th scope="col">Id.</th>
+          <th scope="col">Todo name</th>
+          <th scope="col">Status</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody nuk-for="Nuk{toDoItems.getKey()}" key="index">
+        <tr>
+          <th scope="row" text="id"></th>
+          <td text="name"></td>
+          <td>
+            <span class="badge text-bg-primary" text="status"></span>
+          </td>
+          <td>
+            <button taskid="Nuk[id]" click="Nuk{nukejsCore.clientCallback.create(deleteTask)}" class="btn btn-danger">Delete</button>
+            <button taskid="Nuk[id]" click="Nuk{nukejsCore.clientCallback.create(finishTask)}" class="btn btn-success ms-1">Finished</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </NukApp>
+}

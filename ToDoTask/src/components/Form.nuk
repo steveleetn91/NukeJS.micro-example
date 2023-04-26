@@ -1,0 +1,23 @@
+import NukeJSCore from "nukejscore"
+
+export default function FORMTODOLIST(data, callback, nukepage) {
+  const nukejsCore = new NukeJSCore;
+
+  const onChange = (evt) => {
+    nukepage.valueInput.set(evt.value, false)
+  }
+
+  return <NukApp>
+    <div class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
+      <div class="col-12">
+        <div class="form-outline">
+          <input oninput="Nuk{nukejsCore.clientCallback.create(onChange)}" placeholder='Enter task here...' type="text" class="form-control" />
+        </div>
+      </div>
+
+      <div class="col-12">
+        <button click="Nuk{nukejsCore.clientCallback.create(callback)}" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </NukApp>
+}

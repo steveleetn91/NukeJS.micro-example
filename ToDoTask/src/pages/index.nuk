@@ -1,0 +1,58 @@
+import NukeJSRoute from "nukejs-router/dist/libs/NukeJSRoute";
+import _NukeJSCore from "nukejscore/dist/libs/NukeJSCore";
+import FORMTODOLIST from "../components/Form.nuk";
+import TABLETODOLIST from "../components/Table.nuk";
+
+export default class ToDoList {
+  constructor() {
+    this.core = new _NukeJSCore();
+    this.route = new NukeJSRoute();
+
+    this.valueInput = this.core.hooks.useState("VALUE_INPUT_TASK", '');
+    this.toDoList = this.core.hooks.useState("TO_DO_ITEMS", []);
+  }
+  beforeRender() { }
+  afterRender() { }
+
+  clickSave() {
+    nukepage.toDoList.value.push({ id: nukepage.toDoList.value.length + 1, name: nukepage.valueInput.value, status: 'Progress' })
+    nukepage.toDoList.set(nukepage.toDoList.value)
+  }
+
+  deleteTask(e) {
+    const newToDoItems = nukepage.toDoList.value.filter(item => item.id !== Number(e.getAttribute('taskid')))
+    nukepage.toDoList.set(newToDoItems)
+  }
+
+  finishTask(e) {
+    const selectedTask = nukepage.toDoList.value.find(item => item.id === Number(e.getAttribute('taskid')))
+    selectedTask.status = "Finish"
+    nukepage.toDoList.set(nukepage.toDoList.value)
+  }
+
+  render() {
+    const _ = () => {
+      return (
+        <NukApp>
+          <div class="min-vh-100" style="background-color: #eee;">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="card rounded-3">
+                  <div class="card-body p-4">
+
+                    <h1 class="text-center my-3 pb-3">To Do App</h1>
+
+                    <FORMTODOLIST params="this.clickSave, nukepage"></FORMTODOLIST>
+
+                    <TABLETODOLIST params="nukepage.toDoList, this.deleteTask, this.finishTask"></TABLETODOLIST>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </NukApp>
+      )
+    }
+    this.core.doom.build("root", _());
+  }
+}

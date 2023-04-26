@@ -1,0 +1,8 @@
+export default {
+  routers: [
+    {
+      url: "/",
+      page: import("../pages/index.nuk")
+    },
+  ]
+}
