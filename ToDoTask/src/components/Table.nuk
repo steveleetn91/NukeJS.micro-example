@@ -2,6 +2,7 @@ import NukeJSCore from "nukejscore"
 
 export default function TABLETODOLIST(data, toDoItems, deleteTask, finishTask) {
   const nukejsCore = new NukeJSCore;
+  const finishText = 'Finish';
   return <NukApp>
     <table class="table mb-4">
       <thead>
@@ -14,14 +15,32 @@ export default function TABLETODOLIST(data, toDoItems, deleteTask, finishTask) {
       </thead>
       <tbody nuk-for="Nuk{toDoItems.getKey()}" key="index">
         <tr>
-          <th scope="row" text="id"></th>
+          <th text="id"></th>
           <td text="name"></td>
           <td>
-            <span class="badge text-bg-primary" text="status"></span>
+            <div>
+              <span class="badge text-bg-primary" text="status"></span>
+            </div>
           </td>
-          <td>
-            <button taskid="Nuk[id]" click="Nuk{nukejsCore.clientCallback.create(deleteTask)}" class="btn btn-danger">Delete</button>
-            <button taskid="Nuk[id]" click="Nuk{nukejsCore.clientCallback.create(finishTask)}" class="btn btn-success ms-1">Finished</button>
+          <td if="Nuk[status] === 'Finish' ">
+            <div>
+              <button taskid="Nuk[id]"
+                click="Nuk{nukejsCore.clientCallback.create(deleteTask)}" class="btn btn-danger">Delete</button>
+            </div>
+            <div>
+              <button disabled="disabled" taskid="Nuk[id]"
+                click="Nuk{nukejsCore.clientCallback.create(finishTask)}" class="btn btn-success ms-1">Finished</button>
+            </div>
+          </td>
+          <td if="Nuk[status] !== 'Finish' ">
+            <div>
+              <button taskid="Nuk[id]"
+                click="Nuk{nukejsCore.clientCallback.create(deleteTask)}" class="btn btn-danger">Delete</button>
+            </div>
+            <div>
+              <button taskid="Nuk[id]"
+                click="Nuk{nukejsCore.clientCallback.create(finishTask)}" class="btn btn-success ms-1">Finished</button>
+            </div>
           </td>
         </tr>
       </tbody>

@@ -42,9 +42,9 @@ export default class ToDoList {
 
                     <h1 class="text-center my-3 pb-3">To Do App</h1>
 
-                    <FORMTODOLIST params="this.clickSave, nukepage"></FORMTODOLIST>
+                    <FORMTODOLIST params="this.clickSave, this"></FORMTODOLIST>
 
-                    <TABLETODOLIST params="nukepage.toDoList, this.deleteTask, this.finishTask"></TABLETODOLIST>
+                    <TABLETODOLIST params="this.toDoList, this.deleteTask, this.finishTask"></TABLETODOLIST>
                   </div>
                 </div>
               </div>
