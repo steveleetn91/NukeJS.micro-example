@@ -1,0 +1,60 @@
+import NukeJSCore from "nukejscore"
+
+export default function TABLETODOLIST(data, toDoItems, deleteTask, finishTask, updateTask, valueEdit, saveTask) {
+  const nukejsCore = new NukeJSCore;
+
+  console.log('valueEdit: ', valueEdit)
+
+  const onChange = (evt) => {
+    valueEdit.value[evt.getAttribute('taskid')] = evt.value
+    valueEdit.set(valueEdit.value, false)
+  }
+
+  return <NukApp>
+    <table class="table mb-4">
+      <thead>
+        <tr>
+          <th scope="col">Id.</th>
+          <th scope="col">Todo name</th>
+          <th scope="col">Status</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody nuk-for="Nuk{toDoItems.getKey()}" key="index">
+        <tr>
+          <th text="id"></th>
+          <td if="Nuk[isEdit]">
+            <input taskid="Nuk[id]" oninput="Nuk{nukejsCore.clientCallback.create(onChange)}" value="Nuk{valueEdit.value[Nuk[id]]}" type="text" class="form-control" />
+          </td>
+          <td if="!Nuk[isEdit]">
+            <p text="name"></p>
+          </td>
+          <td>
+            <div>
+              <span class="badge text-bg-primary" text="status"></span>
+            </div>
+          </td>
+          <td if="Nuk[status] === 'Finish' ">
+            <button disabled="disabled" taskid="Nuk[id]" class="btn btn-success ms-1">Update</button>
+              <button disabled="disabled" taskid="Nuk[id]" class="btn btn-secondary ms-1">Finished</button>
+              <button disabled="true" taskid="Nuk[id]"  class="btn btn-danger">Delete</button>
+          </td>
+          <td if="Nuk[status] !== 'Finish' ">
+              <div if="Nuk[isEdit]" class='d-inline-block'>
+                <button taskid="Nuk[id]"
+                click="Nuk{nukejsCore.clientCallback.create(saveTask)}" class="btn btn-success ms-1">Save</button>
+              </div>
+              <div if="!Nuk[isEdit]" class='d-inline-block'>
+                <button taskid="Nuk[id]"
+                click="Nuk{nukejsCore.clientCallback.create(updateTask)}" class="btn btn-success ms-1">Update</button>
+              </div>
+              <button taskid="Nuk[id]"
+                click="Nuk{nukejsCore.clientCallback.create(finishTask)}" class="btn btn-secondary ms-1">Finished</button>
+              <button taskid="Nuk[id]"
+                click="Nuk{nukejsCore.clientCallback.create(deleteTask)}" class="btn btn-danger">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </NukApp>
+}
