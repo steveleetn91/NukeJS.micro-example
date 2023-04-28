@@ -9,13 +9,26 @@ export default class ToDoList {
     this.route = new NukeJSRoute();
 
     this.valueInput = this.core.hooks.useState("VALUE_INPUT_TASK", '');
-    this.toDoList = this.core.hooks.useState("TO_DO_ITEMS", []);
+    this.toDoList = this.core.hooks.useState("TO_DO_ITEMS", [{
+      id: 1,
+      name: 'haha',
+      status: 'sadsad',
+      isEdit: false,
+    }]);
+
+    this.valueEdit = this.core.hooks.useState("EDIT_ITEMS", {});
   }
   beforeRender() { }
-  afterRender() { }
+  afterRender() {
+    let newData = {}
+    nukepage.toDoList.value.forEach((item) => {
+      newData[item.id] =  item.name
+    })
+    nukepage.valueEdit.set(newData, false)
+  }
 
   clickSave() {
-    nukepage.toDoList.value.push({ id: nukepage.toDoList.value.length + 1, name: nukepage.valueInput.value, status: 'Progress' })
+    nukepage.toDoList.value.push({ id: nukepage.toDoList.value.length + 1, name: nukepage.valueInput.value, status: 'Progress', isEdit: false })
     nukepage.toDoList.set(nukepage.toDoList.value)
   }
 
@@ -27,6 +40,19 @@ export default class ToDoList {
   finishTask(e) {
     const selectedTask = nukepage.toDoList.value.find(item => item.id === Number(e.getAttribute('taskid')))
     selectedTask.status = "Finish"
+    nukepage.toDoList.set(nukepage.toDoList.value)
+  }
+
+  updateTask(e) {
+    const selectedTask = nukepage.toDoList.value.find(item => item.id === Number(e.getAttribute('taskid')))
+    selectedTask.isEdit = !selectedTask.isEdit
+    nukepage.toDoList.set(nukepage.toDoList.value)
+  }
+
+  saveTask(e) {
+    const selectedTask = nukepage.toDoList.value.find(item => item.id === Number(e.getAttribute('taskid')))
+    selectedTask.isEdit = false
+    selectedTask.name = nukepage.valueEdit.value[e.getAttribute('taskid')]
     nukepage.toDoList.set(nukepage.toDoList.value)
   }
 
@@ -44,7 +70,7 @@ export default class ToDoList {
 
                     <FORMTODOLIST params="this.clickSave, this"></FORMTODOLIST>
 
-                    <TABLETODOLIST params="this.toDoList, this.deleteTask, this.finishTask"></TABLETODOLIST>
+                    <TABLETODOLIST params="this.toDoList, this.deleteTask, this.finishTask, this.updateTask, this.valueEdit, this.saveTask"></TABLETODOLIST>
                   </div>
                 </div>
               </div>
