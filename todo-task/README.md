@@ -10,6 +10,12 @@ The NukeJS is a Open Source, so it will always free forever.
 
 Document: `http://document.nuke.com.vn`
 
+## Run this example 
+
+CMD Install: `npm install`
+
+CMD Run: `npm run serve`
+
 ## We will donate
 
 We will donate for members working for Nuke as create plugin NukeJS, write document.
