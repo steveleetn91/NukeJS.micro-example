@@ -1,0 +1,58 @@
+{
+  "name": "nukejs.micro",
+  "version": "1.0.0",
+  "description": "NukeJS framework",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx webpack --mode=production --node-env=production",
+    "build:dev": "npx webpack --mode=development",
+    "build:prod": "npx webpack --mode=production --node-env=production",
+    "watch": "npx webpack --watch",
+    "serve": "npx webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steveleetn91/NukeJS.micro.git"
+  },
+  "keywords": [
+    "stevelee",
+    "nukejs",
+    "nukejs",
+    "micro",
+    "vn",
+    "native",
+    "framework"
+  ],
+  "author": "stevelee",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/steveleetn91/NukeJS.micro/issues"
+  },
+  "homepage": "https://github.com/steveleetn91/NukeJS.micro#readme",
+  "dependencies": {
+    "autoprefixer": "^10.4.14",
+    "bootstrap": "^5.2.3",
+    "font-awesome": "^4.7.0",
+    "nukejs-loader": "^1.0.32",
+    "nukejs-router": "^1.1.15",
+    "nukejscore": "^1.0.97"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/preset-env": "^7.20.2",
+    "@webpack-cli/generators": "^3.0.1",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.7.3",
+    "postcss": "^8.4.21",
+    "postcss-loader": "^7.0.2",
+    "sass": "^1.59.3",
+    "sass-loader": "^13.2.0",
+    "webpack": "^5.76.2",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.12.0",
+    "workbox-webpack-plugin": "^6.5.4"
+  }
+}

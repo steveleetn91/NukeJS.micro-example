@@ -1,0 +1,143 @@
+import TESTCOMPONENT from "../components/TestComponent.nuk";
+import POINTCOMPONENT from "../components/PointComponent.nuk";
+import BUTTONCOMPONENT from "../components/ButtonComponent.nuk"
+import DEFAULTLAYOUT from "../layouts/DefaultLayout.nuk";
+import NukeJSRoute from "nukejs-router/dist/libs/NukeJSRoute";
+import NukeJSCore from "nukejscore";
+import { FANPAGECOMPONENT } from "../components/FanpageComponent.nuk"
+export default class Index {
+    constructor() {
+        this.route = new NukeJSRoute();
+        this.core = new NukeJSCore();
+        this.status = {
+            tasks: this.core.hooks.useState("INDEX_tasks", []),
+            updateIndex: this.core.hooks.useState("INDEX_updateIndex", -1),
+            inputTaskName: this.core.hooks.useState("INDEX_inputTaskName", "")
+        }
+    }
+    beforeRender() {
+        console.log('this.route', this.route);
+    }
+    afterRender() {
+
+    }
+    submit() {
+        nukepage.status.count.set(Number(nukepage.status.count.get()) + 1);
+    }
+    render() {
+
+
+        const setvalueTaskName = this.core.clientCallback.create((e) => {
+            this.status.inputTaskName.set(e.value, false);
+        });
+
+        const saveForm = this.core.clientCallback.create((e) => {
+            if (this.status.inputTaskName.get() === "") {
+                return;
+            }
+            // is update 
+            if(Number(this.status.updateIndex.get()) >= 0 ) {
+                const value = this.status.tasks.get();
+                value[Number(this.status.updateIndex.get())].name = this.status.inputTaskName.get();
+                this.status.tasks.set(value);
+                this.status.inputTaskName.set("");
+                this.status.updateIndex.set(-1);
+                return;
+            }
+            // is add new 
+            this.status.tasks.set([
+                ...this.status.tasks.get(),
+                {
+                    "name": this.status.inputTaskName.get(),
+                    isFinish: false
+                }
+            ]);
+            this.status.inputTaskName.set("");
+        });
+
+        const setFinish = this.core.clientCallback.create((e) => {
+            const value = this.status.tasks.get();
+            value[e.getAttribute('index')].isFinish = true;
+            this.status.tasks.set(value);
+        });
+
+        const setDelete = this.core.clientCallback.create((e) => {
+            if (confirm("Do you wanna delete?")) {
+                const value = this.status.tasks.get();
+                value.splice(e.getAttribute('index'), 1);
+                this.status.tasks.set(value);
+            }
+        });
+
+        const setEdit = this.core.clientCallback.create((e) => {
+            this.status.updateIndex.set(Number(e.getAttribute("index")));
+            this.status.inputTaskName.set(
+                this.status.tasks.get()[Number(e.getAttribute("index"))].name 
+            )
+        });
+
+        const cancelEdit = this.core.clientCallback.create((e) => {
+            this.status.updateIndex.set(-1);
+            this.status.inputTaskName.set("")
+        });
+
+        let li = "";
+        this.status.tasks.get().forEach((item, index) => {
+            li += <EmptyBox>
+                <li class="mb-3">
+                    <div class="border p-2 row rounded">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                            <h5 class="text-uppercase">Nuk{item.name}</h5>
+                        </div>
+                        <div class="col-xs-12 cols-m-6 col-md-6 col-lg-6">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                Nuk{item.isFinish === true || index === this.status.updateIndex.get() ? <EmptyBox>
+                                    <button disabled="" type="button" class="btn btn-warning">Edit</button>
+                                    <button disabled="" type="button" class="btn btn-danger">Delete</button>
+                                    <button disabled="" type="button" class="btn btn-success">Finish</button>
+
+                                </EmptyBox> : <EmptyBox>
+                                    <button index="Nuk{index}" type="button" click="Nuk{setEdit}" class="btn btn-warning">Edit</button>
+                                    <button index="Nuk{index}" type="button" click="Nuk{setDelete}" class="btn btn-danger">Delete</button>
+                                    <button index="Nuk{index}" click="Nuk{setFinish}" type="button" class="btn btn-success">Finish</button>
+                                </EmptyBox>}
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </EmptyBox>
+        });
+
+
+        this.core.doom.build("root", <NukApp>
+            <DEFAULTLAYOUT>
+                <div class="container mt-5">
+                    <div class="row">
+                        <div class="col-xs-12 cols-m-6 col-md-6 col-lg-6">
+                            <h2>Form</h2>
+                            <input type='text'
+                                onkeypress="Nuk{setvalueTaskName}"
+                                class="form-control"
+                                value="Nuk{this.status.inputTaskName.get()}"
+                                placeholder="Task name" />
+                            <br />
+                            <button class="btn btn-dark" click="Nuk{saveForm}" >
+                                <span class="fa fa-save"></span> Save</button>
+                            Nuk{this.status.updateIndex.get() >= 0 ?
+                                <EmptyBox><button class="btn btn-warning" click="Nuk{cancelEdit}" >
+                                    <span class="fa fa-remove"></span> Cancel edit</button></EmptyBox> : ''}
+
+                        </div>
+                        <div class="col-xs-12 cols-m-6 col-md-6 col-lg-6">
+                            <h2>Tasks</h2>
+                            <ul>
+                                Nuk{li}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </DEFAULTLAYOUT>
+        </NukApp>);
+    }
+}

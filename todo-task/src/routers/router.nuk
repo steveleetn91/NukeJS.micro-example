@@ -1,0 +1,11 @@
+export default {
+    routers : [
+    {
+        url: "/",
+        page: import("../pages/index.nuk")
+    }],
+    notFound: {
+        url: "/not-found",
+        page: import("../pages/notfound.nuk")
+    }
+}
